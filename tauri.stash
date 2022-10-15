@@ -1,0 +1,729 @@
+# Tauri
+
+A framework for creating cross platform desktop applications with a web frontend.
+
+
+# Summary
+
+
+### Official Site
+<l>https://tauri.studio/<>
+
+
+
+### Documents - Guides
+<l>https://tauri.studio/guides/getting-started/prerequisites<>
+
+
+
+### Documents - API
+<l>https://tauri.studio/api/config<>
+
+
+
+# Commands
+
+
+
+### Project - Create (interactive)
+
+<cb>npm create tauri-app<>
+
+Will Ask For:
+
+<*>App Name
+App Title
+UI Framework
+Use TypeScript<>
+@
+@ npm create
+
+
+
+### Project - Install Dependencies
+
+<cb>npm install<>
+@
+@ npm install
+
+
+
+### Project - Run
+
+<cb>npm run tauri dev<>
+@
+@ npm run tauri dev
+
+
+
+### Project - Upgrade
+
+<cb>npm install @tauri-apps/cli@latest @tauri-apps/api@latest<>
+@
+@ npm install @tauri-apps/cli
+
+
+
+# Rust
+@
+@ rust-only
+
+
+### Rust - Tauri Start
+
+<cb>tauri::Builder::default().run(tauri::generate_context!());<>
+
+Usage:
+
+<cb>fn main() {
+
+	tauri::Builder::default()
+		.run(tauri::generate_context!())
+		.expect("<v>Tauri failed to start.<>");
+}<>
+
+
+
+## Rust - Accept Command From JavaScript / TypeScript
+
+<*>Define Rust Function
+Register Function with Tauri
+Invoke Command From JavaScript/TypeScript<>
+@
+@ front-end-to-backend, frontend-to-backend, command, call
+@ from-frontend, to-backend
+
+
+### Rust - Define Callable Command
+
+<cb>#[tauri::command]
+fn <v>command_name<>() {
+	<v>...<>
+}<>
+
+<cb>tauri::Builder::default()
+	.invoke_handler(tauri::generate_handler![<v>command_name<>])
+	<v>...<>;<>
+@
+@ #[tauri::command]
+@ tauri::generate_handler![]
+
+
+
+### Rust - Define Callable Command - With Parameter
+
+<cb>#[tauri::command]
+fn <v>command_name<>(parameter: &str <m>(?str only?)<>) {
+	
+}<>
+
+<cb>tauri::Builder::default()
+	.invoke_handler(tauri::generate_handler![<v>command_name<>])
+	<v>...<>;<>
+@
+@ #[tauri::command]
+
+
+
+### Rust - Define Callable Command - With Return Value
+
+<cb>#[tauri::command]
+fn <v>command_name<>() -> String <m>(?String only?)<> {
+	
+}<>
+@
+@ #[tauri::command]
+
+
+
+## Rust - Call JavaScript / TypeScript
+
+Call the frontend by:
+
+<*>Defining Tauri Event in JavaScript
+Fire Tauri Event from Rust<>
+@
+@ backend-to-frontend, backend-to-front-end, command, call
+@ from-backend, to-frontend
+
+
+### Rust - Fire Tauri Event - All Windows
+
+<cb>= <v>app_handle<>.emit_all("<v>event-name<>", <v>payload<>)<>
+
+Usage:
+
+<cb>let <v>app_handle<> = app.app_handle();
+let <v>result<> = <v>app_handle<>.emit_all("<v>event-name<>", <v>payload<>);<>
+
+Returns: <c>Result\<()><>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.AppHandle.html">AppHandle<>
+@
+@ app handle
+@ tauri::AppHandle apphandle, .emit_all()
+
+
+
+### Rust - Fire Tauri Event - Specific Window
+
+<cb>= <v>app_handle<>.emit_to("<v>event-name<>", <v>payload<>)<>
+
+Usage:
+
+<cb>let <v>app_handle<> = app.app_handle();
+let <v>result<> = <v>app_handle<>.emit_to("<v>window-label<>", "<v>event-name<>", <v>payload<>);<>
+
+Returns: <c>Result\<()><>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.AppHandle.html">AppHandle<>
+@
+@ app handle, specified label, labeled
+@ tauri::AppHandle apphandle, .emit_to()
+
+
+
+## Rust - Backend Events
+@
+@ threads, tokio
+
+
+### Rust - Backend Event - Create
+
+<cb>tauri::async_runtime::spawn(async move {
+	<v>...<>
+});<>
+
+
+Creates a backend event.
+
+<c>move<>: Moves ownership of closed variables.
+
+
+Requires:
+
+<cb>tokio = { version = "1", features = ["full"] }<>
+@
+@ tauri::async_runtime::spawn(), spawn()
+
+
+
+
+### Rust - Backend Event - Sleep
+
+<cb>sleep(<v>duration_1<>)<>
+
+Usage:
+
+<cb>use tokio::time::sleep;
+use std::time::Duration;
+
+let <v>duration<> = Duration::from_millis(<v>milliseconds<>);
+sleep(<v>duration<>);<>
+
+
+Suspends the thread for the given duration.
+
+
+Requires:
+
+<cb>tokio = { version = "1", features = ["full"] }<>
+@
+@ tokio::time::sleep(), sleep()
+
+
+
+# Rust - Managed Data
+@
+@ types, management, shared
+
+
+
+### Rust - Data - Set
+
+<cb>tauri::Builder::default()
+		.manage(<v>item<>)<>
+@
+@ assign, manage, tauri.builder.manage(), builder.manage(), .manage()
+
+
+
+### Rust - Data - Retrieve In Command
+
+<cb>#[command]
+pub fn <v>command-1<>(<v>item<>: State\<'_, <v>T<>>) -> <v>...<> {
+	<v>...<>
+}<>
+
+
+
+# Rust - Shared Data
+@
+@ types
+
+
+### Rust - Managed Data - Requirements
+
+<cb>\#[derive(Clone, Serialize)]
+struct <v>ManagedType<> {
+	<v>...<>
+}<>
+
+Usage:
+
+<cb>use serde::Serialize;
+
+\#[derive(Clone, Serialize)]
+struct <v>ManagedType<> {
+	<v>...<>
+}<>
+
+Requires:
+
+<cb>serde::Serialize<>
+
+Implement clone and serialize on managed types.
+@
+@ requires, use
+
+
+
+# Rust - Tauri Data Types
+@
+@ data-only, data-type-only, data-types-only
+
+
+#### Size
+
+<cb>tauri::Size<>
+
+Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/enum.Size.html">Size<>
+
+
+
+#### State
+
+<cb>tauri::State<>
+
+Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.State.html">Size<>
+
+
+
+## Components
+@
+@ comp-only, component-only, components-only
+
+
+### App
+
+<cb>tauri::App<>
+
+Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.App.html">App<>
+
+
+
+### Builder
+
+<cb>tauri::Builder<>
+
+Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.Builder.html">Builder<>
+
+
+Builder::default()
+
+
+
+#### Builder - Operations
+
+
+
+##### Builder - Add Managed Type
+
+<cb><v>builder_1<>.manage(<v>item_1<>)<>
+@
+@ builder.manage(), .manage()
+
+
+
+##### Builder - Setup Window
+
+<cb><v>builder_1<>.setup(<v>setup_function<>)<>
+
+Setup Function: <c>FnOnce(&mut App\<R>) -> Result\<(), Box\<dyn Error>> + Send + 'static<>
+@
+@ builder.setup(), .setup()
+
+
+
+### Manager
+
+<cb>tauri::Manager<>
+
+Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/trait.Manager.html">Manager<>
+
+
+
+### Window
+
+<cb>tauri::window::Window<>
+
+Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/window/struct.Window.html">Window<>
+
+
+#### Window - Properties
+
+
+
+##### Size - Inner Size
+
+<cb>= <v>window_1<>.inner_size()<>
+
+
+Returns the inner size of the window.
+
+This is the size of web content insize the window.
+@
+@ window..inner_size(), .inner_size()
+
+
+
+##### Size - Outer Size
+
+<cb>= <v>window_1<>.outer_size()<>
+
+
+Returns the outer size of the window.
+
+This is the absolute dimensions including borders and headings.
+@
+@ window..outer_size(), .outer_size()
+
+
+
+#### Window - Operations
+
+
+##### Size - Set
+
+<cb><v>window_1<>.set_size(<v>size<>);<>
+
+Usage:
+
+<cb>use tauri::{LogicalSize, Size};
+
+<v>window_1<>.set_size(Size::Logical(LogicalSize::new(width: <v>value<>, height: <v>value<>)));<>
+
+<cb>use tauri::{PhysicalSize, Size};
+
+<v>window_1<>.set_size(Size::Physical(PhysicalSize::new(width: <v>value<>, height: <v>value<>)));<>
+
+Sets the window size.
+
+
+
+##### Title - Set
+
+<cb><v>window_1<>.set_title("<v>Window Title<>");<>
+
+
+
+# JavaScript
+@
+@ js-only, javascript-only
+
+
+### JavaScript - Import Tauri
+
+<cb>const { invoke } = window.__TAURI__.tauri;<>
+@
+@ window.__TAURI__.tauri, .__TAURI__.tauri, .tauri
+
+
+
+## JavaScript - Call Rust Backend
+@
+@ send to backend, to-backend, from-frontend
+
+
+### JavaScript - Call Rust Command
+
+<cb>await invoke("<v>command<>")
+
+await invoke("<v>command<>", { <v>data<> })<>
+
+Usage:
+
+<cb>const { invoke } = window.__TAURI__.tauri;
+
+await invoke("<v>command<>")
+await invoke("<v>command<>", { <v>data<> })<>
+@
+@ await invoke
+
+
+
+### JavaScript - Call Rust Command With Return
+
+<cb>= await invoke("<v>command<>")
+
+= await invoke("<v>command<>", { <v>data<> })<>
+
+Usage:
+
+<cb>const { invoke } = window.__TAURI__.tauri;
+
+= await invoke("<v>command<>")
+= await invoke("<v>command<>", { <v>data<> })<>
+@
+@ await invoke
+
+
+
+## JavaScript - Receive Backend Requests
+@
+@ call from backend, tauri events, send to frontend
+@ from-backend, to-frontend
+
+
+
+### JavaScript - Create Tauri Event Listener
+
+<cb>listen("<v>tauri-event<>", (<v>event<>) => {
+	<v>...<>
+});<>
+
+Usage:
+
+<cb>import { listen } from '@tauri-apps/api/event';
+
+listen("<v>tauri-event<>", (<v>event<>) => {
+	<v>...<>
+});<>
+
+
+Creates a listener for backend Tauri events.
+@
+@ @tauri-apps/api/event, listen
+
+
+
+# TypeScript
+@
+@ ts-only, typescript-only
+
+
+### TypeScript - Import Tauri
+
+<cb>import { invoke } from "@tauri-apps/api/tauri"<>
+@
+@ @tauri-apps/api/tauri
+
+
+
+## TypeScript - Call Backend
+@
+@ call rust, send to
+@ to-backend, from-frontend
+
+
+### TypeScript - Call Rust Command
+
+<cb>await invoke("<v>command<>")
+
+await invoke("<v>command<>", { <v>data<> })<>
+
+Usage:
+
+<cb>import { invoke } from "@tauri-apps/api/tauri"
+
+await invoke("<v>command<>")
+await invoke("<v>command<>", { <v>data<> })<>
+@
+@ await invoke, @tauri-apps/api/tauri
+
+
+
+### TypeScript - Call Rust Command With Return
+
+<cb>= await invoke("<v>command<>")
+
+= await invoke("<v>command<>", { <v>data<> })<>
+
+Usage:
+
+<cb>import { invoke } from "@tauri-apps/api/tauri"
+
+= await invoke("<v>command<>")
+= await invoke("<v>command<>", { <v>data<> })<>
+@
+@ await invoke, @tauri-apps/api/tauri
+
+
+
+## TypeScript - Receive Backend Requests
+@
+@ call from backend, tauri events, send frontend
+@ from-backend, to-frontend
+
+
+### TypeScript - Create Tauri Event Listener
+
+<cb>listen("<v>tauri-event<>", (<v>event<>: Event\<<v>T<>>) => {
+	<v>...<>
+});<>
+
+Usage:
+
+<cb>import { listen, Event as TauriEvent } from '@tauri-apps/api/event';
+
+listen("<v>tauri-event<>", (<v>event<>: Event\<<v>T<>>) => {
+	<v>...<>
+});<>
+
+
+Creates a listener for backend Tauri events.
+@
+@ @tauri-apps/api/event, listen
+
+
+
+# Settings
+
+
+### Setting - App - Icon
+
+tauri.conf.json:
+
+<cb>{
+{
+	"tauri": {
+		"icon": [
+		"icons/32x32.png",
+		"icons/128x128.png",
+		"icons/128x128@2x.png",
+		"icons/icon.icns",
+		"icons/icon.ico"
+		],
+	}
+	}
+}<>
+
+
+
+### Setting - App - Executable Name
+
+tauri.conf.json:
+
+<cb>{
+	"package": {
+	"productName": "<v>App-Name<>",
+	}
+}<>
+
+
+
+### Setting - Window - Always on Top
+
+tauri.conf.json:
+
+<cb>{
+	"tauri": {
+		"windows": [
+			{
+				"alwaysOnTop": <v>true | false<>,
+				"height": <v>pixels<>,
+				"width": <v>pixels<>
+			}
+		]
+	}
+}<>
+
+
+
+### Setting - Window - Default Size
+
+tauri.conf.json:
+
+<cb>{
+	"tauri": {
+		"windows": [
+			{
+				"fullscreen": <v>true | false<>,
+				"height": <v>pixels<>,
+				"width": <v>pixels<>
+			}
+		]
+	}
+}<>
+
+<cb>{
+	"tauri": {
+		"windows": [
+			{
+				"fullscreen": <v>true | false<>,
+				"height": <v>pixels<>,
+				"width": <v>pixels<>,
+				"x": <v>logical_pixels<>,
+				"y": <v>logical_pixels<>
+			}
+		]
+	}
+}<>
+
+(<m>Confirm "x", "y" = logical pixels!<>)
+
+
+
+### Setting - Window - Resizable / Fixed Size
+
+tauri.conf.json:
+
+<cb>{
+	"tauri": {
+	 "windows": [
+		{
+		"resizable": <v>true | false<>,
+		}
+	]
+	}
+}<>
+
+
+
+# Files and Directories
+
+
+### Tauri App Config File
+
+<cb><v>project<>/.
+└── src-tauri/
+	└── tauri.conf.json<>
+
+
+
+### Tauri Icon Directory
+
+<cb><v>project<>/.
+└── src-tauri/
+	└── icons/
+		└── *.png<>
+
+
+
+### Icon Files
+
+<table><col>32x32.png<><col>32 x 32<>
+<col>128x128.png<><col>128 x 128<>
+<col>128x128@2x.png<><col>256 x 256<>
+<col>icon.ico<><col>256 x 256<>
+<col><><col>128 x 128<>
+<col><><col>16 x 16<>
+<col>icon.png<><col>512 x 512<><>
+
+
+
+# Terms
+
+
