@@ -6,23 +6,31 @@ A framework for creating cross platform desktop applications with a web frontend
 # Summary
 
 
-### Official Site
+#### Official Site
 <l>https://tauri.studio/<>
 
-
-
-### Documents - Guides
+#### Documents - Guides
 <l>https://tauri.studio/guides/getting-started/prerequisites<>
 
-
-
-### Documents - API
+#### Reference - Config
 <l>https://tauri.studio/api/config<>
+
+#### Reference - Tauri Rust API
+<l>https://docs.rs/tauri/latest/tauri/<>
+
+#### Reference - Tauri Rust API All
+<l>https://docs.rs/tauri/latest/tauri/all.html<>
+
+#### Reference - Tauri Typescript / Javascript
+<l>https://tauri.app/v1/api/js/<>
 
 
 
 # Commands
+@ tauri, command-only, commands-only, app-only, application-only, proj-only, project-only
 
+
+## Project - Basics
 
 
 ### Project - Create (interactive)
@@ -37,6 +45,7 @@ UI Framework
 Use TypeScript<>
 @
 @ npm create
+@ app
 
 
 
@@ -45,7 +54,22 @@ Use TypeScript<>
 <cb>npm install<>
 @
 @ npm install
+@ app
 
+
+
+### Project - Upgrade
+
+<cb>npm install @tauri-apps/cli@latest @tauri-apps/api@latest<>
+
+Upgrade the Tauri version
+@
+@ npm install @tauri-apps/cli
+@ app, tauri
+
+
+
+## Project - Run
 
 
 ### Project - Run
@@ -53,14 +77,132 @@ Use TypeScript<>
 <cb>npm run tauri dev<>
 @
 @ npm run tauri dev
+@ app
 
 
 
-### Project - Upgrade
+### Project - Run - Debug Mode
 
-<cb>npm install @tauri-apps/cli@latest @tauri-apps/api@latest<>
+<cb>RUST_BACKTRACE=1
+
+npm run tauri dev<>
 @
-@ npm install @tauri-apps/cli
+@ npm run tauri dev
+@ app
+
+
+
+### Project - Run - Verbose Mode
+
+<cb>npm run tauri dev -- -v<>
+
+<c>-v | --verbose<>
+@
+@ npm run tauri dev
+@ app, -v, --verbose
+
+
+
+## Project - Build
+
+
+### Project - Build
+
+<cb>npm run tauri build<>
+@
+@ npm run tauri build
+@ compile,  distribute, distribution
+@ app
+
+
+
+### Project - Build - Debug Mode
+
+<cb>npm run tauri build -- --debug<>
+@
+@ npm run tauri build
+@ compile, distribute, distribution
+@ app
+
+
+
+### Project - Build - Verbose Mode
+
+<cb>npm run tauri build -- -v<>
+
+<c>-v | --verbose<>
+@
+@ npm run tauri build
+@ compile, distribute, distribution
+@ app, -v, --verbose
+
+
+### Project - Build - MacOS
+
+<l>https://tauri.app/v1/guides/building/macos/<>
+
+Apple Silicon Mac:
+
+<cb>--target aarch64-apple-darwin<>
+
+Intel Mac:
+
+<cb>--target x86_64-apple-darwin<>
+
+Universal Binary:
+
+<cb>--target universal-apple-darwin<>
+@
+@ m1, m2, apple silicon, intel, x86, universal binary
+@ aarch64-apple-darwin, universal-apple-darwin, x86_64-apple-darwin
+
+
+
+### Project - Build - Linux / Debian
+
+<l>https://tauri.app/v1/guides/building/debian<>
+
+<!>Note:<> Can only be created in a Debian environment.
+
+
+
+### Project - Build - Windows
+
+<l>https://tauri.app/v1/guides/building/windows<>
+
+<cb>--target i686-pc-windows-msvc<>
+
+
+<!>Note:<> Must be created in Windows.
+
+
+
+## Project - Distribution / Publish (Online Docs)
+@
+@ deploy, distribute
+
+
+### Publish - MacOS
+
+<l>https://tauri.app/v1/guides/distribution/sign-macos<>
+@
+@ signing
+
+
+
+### Publish - Windows
+
+<l>https://tauri.app/v1/guides/distribution/sign-windows<>
+@
+@ signing
+
+
+
+### Publish - Linux
+
+<l>https://tauri.app/v1/guides/distribution/sign-linux<>
+@
+@ signing
 
 
 
@@ -69,7 +211,10 @@ Use TypeScript<>
 @ rust-only
 
 
-### Rust - Tauri Start
+## Rust - Tauri Start
+
+
+### Tauri Start - Build Instance
 
 <cb>tauri::Builder::default().run(tauri::generate_context!());<>
 
@@ -83,6 +228,35 @@ Usage:
 }<>
 
 
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html">Builder<>
+
+
+
+### Tauri Start - Build - Add Back End Command
+
+<cb><v>builder1<>.invoke_handler(tauri::generate_handler![<v>command_1<>, <v>command_2<>, <v>...<>])<>
+
+Usage:
+
+<cb>#[tauri::command]
+fn <v>command_name<>(parameter: &str <m>(?str only?)<>) {
+	
+}<>
+
+<cb>fn main() {
+
+	tauri::Builder::default()
+		.invoke_handler(tauri::generate_handler![<v>command_name<>])
+		.run(tauri::generate_context!())
+		.expect("<v>Tauri failed to start.<>");
+}<>
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html">Builder<>.<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html#method.invoke_handler">invoke_handler<>
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/macro.generate_handler.html">generate_handler!<>
+@
+@ .invoke_handler(), tauri::generate_handler![], generate_handler![], generate_handler!
+
+
 
 ## Rust - Accept Command From JavaScript / TypeScript
 
@@ -94,6 +268,7 @@ Invoke Command From JavaScript/TypeScript<>
 @ from-frontend, to-backend
 
 
+
 ### Rust - Define Callable Command
 
 <cb>#[tauri::command]
@@ -102,7 +277,7 @@ fn <v>command_name<>() {
 }<>
 
 <cb>tauri::Builder::default()
-	.invoke_handler(tauri::generate_handler![<v>command_name<>])
+	.invoke_handler(tauri::generate_handler![<v>command_name<>, <v>command_name_2<>, <v>...<>])
 	<v>...<>;<>
 @
 @ #[tauri::command]
@@ -113,13 +288,30 @@ fn <v>command_name<>() {
 ### Rust - Define Callable Command - With Parameter
 
 <cb>#[tauri::command]
-fn <v>command_name<>(parameter: &str <m>(?str only?)<>) {
-	
+fn <v>command_name<>(parameter: &<v>T<>) {
+	<v>...<>
 }<>
 
-<cb>tauri::Builder::default()
-	.invoke_handler(tauri::generate_handler![<v>command_name<>])
-	<v>...<>;<>
+
+Defines a callable command for the front end.
+
+Parameter types must support Serde's deserialize trait.
+@
+@ #[tauri::command]
+
+
+
+### Rust - Define Callable Command - With Parameter - Naming Convention
+
+<cb>#[tauri::command]
+fn <v>command_name<>(<v>param_name_1<>: <v>T<>, <v>param_name_2<>: <v>T<>) {
+	<v>...<>
+}<>
+
+
+Use snake_case for the names of properties sent from the front end.
+
+(Javascript must use camelCase)
 @
 @ #[tauri::command]
 
@@ -147,19 +339,20 @@ Fire Tauri Event from Rust<>
 @ from-backend, to-frontend
 
 
+
 ### Rust - Fire Tauri Event - All Windows
 
-<cb>= <v>app_handle<>.emit_all("<v>event-name<>", <v>payload<>)<>
+<cb>= <v>app_handle<>.emit_all("<v>event-name<>", <v>data<>)<>
 
 Usage:
 
 <cb>let <v>app_handle<> = app.app_handle();
-let <v>result<> = <v>app_handle<>.emit_all("<v>event-name<>", <v>payload<>);<>
+let <v>result<> = <v>app_handle<>.emit_all("<v>event-name<>", <v>data<>);<>
 
 Returns: <c>Result\<()><>
 
 
-Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.AppHandle.html">AppHandle<>
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.AppHandle.html">AppHandle<>
 @
 @ app handle
 @ tauri::AppHandle apphandle, .emit_all()
@@ -168,68 +361,132 @@ Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.AppHandle.html">AppHand
 
 ### Rust - Fire Tauri Event - Specific Window
 
-<cb>= <v>app_handle<>.emit_to("<v>event-name<>", <v>payload<>)<>
+<cb>= <v>app_handle<>.emit_to("<v>event-name<>", <v>data<>)<>
 
 Usage:
 
 <cb>let <v>app_handle<> = app.app_handle();
-let <v>result<> = <v>app_handle<>.emit_to("<v>window-label<>", "<v>event-name<>", <v>payload<>);<>
+let <v>result<> = <v>app_handle<>.emit_to("<v>window-label<>", "<v>event-name<>", <v>data<>);<>
 
 Returns: <c>Result\<()><>
 
 
-Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.AppHandle.html">AppHandle<>
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.AppHandle.html">AppHandle<>
 @
 @ app handle, specified label, labeled
 @ tauri::AppHandle apphandle, .emit_to()
 
 
 
-## Rust - Backend Events
-@
-@ threads, tokio
+### Rust - Fire Tauri Event - With Data
 
-
-### Rust - Backend Event - Create
-
-<cb>tauri::async_runtime::spawn(async move {
+<cb>#[derive(Clone, serde::Serialize)]
+struct Data {
 	<v>...<>
+}<>
+
+Usage:
+
+<cb>let data = Data { <v>...<> }
+<v>app_handle<>.emit_all("<v>event-name<>", <v>data<>)
+<v>app_handle<>.emit_to("<v>window-label<>", "<v>event-name<>", <v>data<>)<>
+
+Returns: <c>Result\<()><>
+
+
+Pass a struct that implements Serialize.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.AppHandle.html">AppHandle<>
+@
+@ app handle, arguments, parameters
+@ app handle, specified label, labeled
+@ tauri::AppHandle apphandle, .emit_all(), .emit_to()
+
+
+
+## Rust - Async Task
+@
+@ background, backend, tokio, threads
+
+
+### Rust - Async Task - Requirements
+
+Cargo.toml:
+
+<cb>[dependencies]
+tokio = { version = "1", features = ["full"] }<>
+
+
+Requires tokio with full features.
+@
+@ tokio
+@ tauri::async_runtime::spawn(), spawn()
+
+
+
+### Rust - Async Task - Create
+
+<cb>spawn(async move { <v>...<> });<>
+
+Usage:
+
+<cb>use tauri::async_runtime::spawn;
+
+spawn(async move {
+
+    <v>...<>
 });<>
 
 
-Creates a backend event.
-
-<c>move<>: Moves ownership of closed variables.
+Creates an asyncronous task in the Rust backend.
 
 
-Requires:
+Example:
 
-<cb>tokio = { version = "1", features = ["full"] }<>
+<cb>use tauri::AppHandle;
+use tauri::async_runtime::spawn;
+
+fn spawn_background_task(<v>app_handle<>: AppHandle) {
+
+    spawn(async move {
+
+        loop {
+            <v>...<>
+        }
+    });
+}
+
+tauri::Builder::default()
+    .setup(|<v>app<>| {
+        spawn_background_task(<v>app<>.app_handle());
+    })
+    <v>...<>
+    .run(generate_context!())<>
 @
 @ tauri::async_runtime::spawn(), spawn()
 
 
 
+### Rust - Async Task - Sleep
 
-### Rust - Backend Event - Sleep
-
-<cb>sleep(<v>duration_1<>)<>
+<cb>sleep(<v>duration_1<>).await;<>
 
 Usage:
 
 <cb>use tokio::time::sleep;
-use std::time::Duration;
 
-let <v>duration<> = Duration::from_millis(<v>milliseconds<>);
-sleep(<v>duration<>);<>
+sleep(<v>duration_1<>).await;<>
 
 
-Suspends the thread for the given duration.
+Suspends the task for the given time.
 
 
-Requires:
+Example:
 
-<cb>tokio = { version = "1", features = ["full"] }<>
+<cb>const <v>SLEEP_DURATION<>: Duration = Duration::from_millis(<v>1000<>);
+
+sleep(<v>SLEEP_DURATION<>).await;<>
 @
 @ tokio::time::sleep(), sleep()
 
@@ -293,119 +550,627 @@ Implement clone and serialize on managed types.
 # Rust - Tauri Data Types
 @
 @ data-only, data-type-only, data-types-only
+@ types-only, tauri-types-only, tt-only
 
 
-#### Size
+
+## Error
+
+<cb>tauri::Error<>
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l https://docs.rs/tauri/latest/tauri/enum.Error.html>Error<>
+
+
+Tauri's error type (Enum).
+@
+@ error-only
+@ tauri::Error
+
+
+
+## GlobalWindowEvent
+
+<cb>tauri::GlobalWindowEvent<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l https://docs.rs/tauri/latest/tauri/struct.GlobalWindowEvent.html>GlobalWindowEvent<>
+@
+@ global window event
+@ tauri::GlobalWindowEvent
+
+
+## LogicalPosition
+
+<cb>tauri::LogicalPosition<>
+
+<cb>pub struct LogicalPosition\<<v>P<>> {
+    pub x: P,
+    pub y: P,
+}<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.LogicalPosition.html">LogicalPosition<>
+@
+@ Logical Position
+@ tauri::LogicalPosition
+
+
+
+## LogicalSize
+
+<cb>tauri::LogicalSize<>
+
+<cb>pub struct LogicalSize\<<v>P<>> {
+    pub width: P,
+    pub height: P,
+}<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.LogicalSize.html">LogicalSize<>
+@
+@ Logical Size
+@ tauri::LogicalSize
+
+
+
+## Position
+
+<cb>tauri::Position<>
+
+<cb>pub enum Size {
+    Physical(PhysicalPosition\<i32>),
+    Logical(LogicalPosition\<f64>),
+}<>
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/enum.Position.html">Position<>
+@
+@ tauri::Position
+
+
+
+## PhysicalPosition
+
+<cb>tauri::PhysicalPosition<>
+
+<cb>pub struct PhysicalPosition\<<v>P<>> {
+    pub x: P,
+    pub y: P,
+}<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.PhysicalPosition.html">PhysicalPosition<>
+@
+@ Physical Position
+@ tauri::PhysicalPosition
+
+
+
+## PhysicalSize
+
+<cb>tauri::PhysicalSize<>
+
+<cb>pub struct PhysicalSize\<<v>P<>> {
+    pub width: P,
+    pub height: P,
+}<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.PhysicalSize.html">PhysicalSize<>
+@
+@ Physical Size
+@ tauri::PhysicalSize
+
+
+
+## Result
+
+<cb>tauri::Result<>
+
+<cb>Result\<<v>T<>, tauri::Error><>
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/type.Result.html">Result<>
+@
+@ tauri::result
+
+
+
+## Size
 
 <cb>tauri::Size<>
 
-Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/enum.Size.html">Size<>
+<cb>pub enum Size {
+    Physical(PhysicalSize\<u32>),
+    Logical(LogicalSize\<f64>),
+}<>
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/enum.Size.html">Size<>
+@
+@ tauri::size
 
 
 
-#### State
+## State
 
 <cb>tauri::State<>
 
-Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.State.html">Size<>
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.State.html">State<>
+@
+@ tauri::state
+
+
+## WindowEvent
+
+<cb>tauri::WindowEvent<>
+
+<cb>pub enum WindowEvent {
+	CloseRequested {api: CloseRequestApi},
+	Destroyed,
+	FileDrop(FileDropEvent),
+	Focused(bool),
+	Moved(PhysicalPosition\<i32>),
+	Resized(PhysicalSize\<u32>),
+	ScaleFactorChanged {scale_factor: f64, new_inner_size: PhysicalSize\<u32>,},
+	ThemeChanged(Theme),
+}<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l https://docs.rs/tauri/latest/tauri/enum.WindowEvent.html>WindowEvent<>
+@
+@ window event
+@ tauri::WindowEvent
 
 
 
-## Components
+# Rust - Tauri Components
 @
 @ comp-only, component-only, components-only
 
 
-### App
+## App
 
 <cb>tauri::App<>
 
-Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.App.html">App<>
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.App.html">App<>
+@
+@ tauri::App
+@ app-only
 
 
 
-### Builder
+### App - Properties
+
+
+#### App - Get Window By Label
+
+<cb>= <v>app<>.get_window("<v>window_label<>")<>
+
+Usage:
+
+<cb>use tauri::manager;
+
+= <v>app<>.get_window("<v>window_label<>")<>
+
+
+Returns: <c>Option\<Window><>
+
+
+Returns a window using it's name (label).
+
+Requires the manager trait.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.App.html">App<>.<l https://docs.rs/tauri/latest/tauri/struct.App.html#method.get_window>get_window<>
+@
+@ find, retrieve
+@ app.get_window(), .get_window()
+
+
+
+#### App - Get All Windows
+
+<cb>= <v>app<>.windows()<>
+
+Returns: <c>HashMap\<String, Window><>
+
+
+Returns a hashmap of all managed windows.
+
+Retrieve an individual window using their label.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.App.html">App<>.<l https://docs.rs/tauri/latest/tauri/struct.App.html#method.windows>windows<>
+@
+@ find, retrieve
+@ app.windows(), .windows()
+
+
+
+## Builder
 
 <cb>tauri::Builder<>
 
-Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/struct.Builder.html">Builder<>
+Usage:
+
+<cb><>tauri::Builder::default()
+        .invoke_handler(generate_handler![<v>command_1<>, <v>command_2<>, <v>...<>])
+        .run(generate_context!())
+        .expect("error while running tauri application");<>
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html">Builder<>
+@
+@ tauri::Builder
+@ builder-only, tauri-builder-only
 
 
-Builder::default()
+
+### Builder - Create
+
+
+#### Builder - Create with Default
+
+<cb>tauri::Builder::default()<v>...<><>
+
+Usage:
+
+<cb>tauri::Builder::default()
+        .invoke_handler(generate_handler![<v>command_1<>, <v>command_2<>, <v>...<>])
+        .run(generate_context!())
+        .expect("error while running tauri application");<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html">Builder<>.<l https://docs.rs/tauri/latest/tauri/struct.Builder.html#method.default>default<>
+@
+@ tauri::Builder::default(), Builder::default(), default()
 
 
 
-#### Builder - Operations
+### Builder - Create Operations
+
+
+#### Builder - Add Event
+
+<cb><v>builder_1<>.on_window_event(<v>event_callback<>)<>
+
+<cb><v>builder_1<>.on_window_event(|<v>event<>| match event.event() { <v>...<> })<>
+
+
+Calls the callback function when an event fires.
+
+
+Event Window:
+
+<cb>= <v>event<>.window()<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html">Builder<>.<l https://docs.rs/tauri/latest/tauri/struct.Builder.html#method.on_window_event>on_window_event<>
+@
+@ builder.on_window_event(), .on_window_event()
 
 
 
-##### Builder - Add Managed Type
+#### Builder - Add Managed Type
 
 <cb><v>builder_1<>.manage(<v>item_1<>)<>
+
+Adds data that must be managed by the window.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html">Builder<>.<l https://docs.rs/tauri/latest/tauri/struct.Builder.html#method.manage>manage<>
 @
 @ builder.manage(), .manage()
 
 
 
-##### Builder - Setup Window
+#### Builder - Setup App
 
 <cb><v>builder_1<>.setup(<v>setup_function<>)<>
 
+<cb><v>builder_1<>.setup(|<v>app<>| { <v>...<> })<>
+
 Setup Function: <c>FnOnce(&mut App\<R>) -> Result\<(), Box\<dyn Error>> + Send + 'static<>
+
+
+Calls the setup function during the build passing an instance of the app.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html">Builder<>.<l https://docs.rs/tauri/latest/tauri/struct.Builder.html#method.setup>setup<>
 @
 @ builder.setup(), .setup()
 
 
 
-### Manager
+#### Builder - Setup Window
+
+<cb><v>builder_1<>.on_webview_ready(<v>webview_function<>)<>
+
+<cb><v>builder_1<>.on_webview_ready(|<v>window<>| { <v>...<> })<>
+
+Setup Function: <c>FnOnce(&mut App\<R>) -> Result\<(), Box\<dyn Error>> + Send + 'static<>
+
+
+Calls the setup function during the build passing an instance of the app.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.Builder.html">Builder<>.<l https://docs.rs/tauri/latest/tauri/struct.Builder.html#method.on_webview_ready>on_webview_ready<>
+@
+@ webview
+@ builder.on_webview_ready(), .on_webview_ready()
+
+
+
+## Manager
 
 <cb>tauri::Manager<>
 
-Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/trait.Manager.html">Manager<>
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/trait.Manager.html">Manager<>
 
 
 
-### Window
+## Monitor
+
+<cb>tauri::Monitor<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Monitor.html">Monitor<>
+@
+@ dimensions
+@ tauri::Monitor
+
+
+
+### Monitor - Properties
+
+
+#### Monitor - Position
+
+<cb>= <v>monitor_1<>.position()<>
+
+Returns: <c>&PhysicalPosition\<i32><>
+
+
+Returns the monitor's position as defined by the system.
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Monitor.html">Monitor<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Monitor.html#method.position>position<>
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.PhysicalPosition.html">PhysicalPosition<>
+@
+@ top, left, x, y
+@ monitor.position(), .position()
+
+
+
+#### Monitor - Size
+
+<cb>= <v>monitor_1<>.size()<>
+
+Returns: <c>&PhysicalSize\<i32><>
+
+
+Returns the monitor's width and height.
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Monitor.html">Monitor<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Monitor.html#method.size>size<>
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/struct.PhysicalSize.html">PhysicalSize<>
+@
+@ width, height
+@ monitor.size(), .size()
+
+
+
+#### Monitor - Scale Factor
+
+<cb>= <v>monitor_1<>.scale_factor()<>
+
+Returns: <c>f64<>
+
+
+Returns the scaling factor used to convert logical units into physical units.
+
+<card>physical unit = logical unit * scale factor<>
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Monitor.html">Monitor<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Monitor.html#method.scale_factor>scale_factor<>
+@
+@ monitor.scale_factor(), .scale_factor()
+
+
+
+## Window
 
 <cb>tauri::window::Window<>
 
-Tauri Docs: <l "https://docs.rs/tauri/1.0.5/tauri/window/struct.Window.html">Window<>
-
-
-#### Window - Properties
-
-
-
-##### Size - Inner Size
-
-<cb>= <v>window_1<>.inner_size()<>
-
-
-Returns the inner size of the window.
-
-This is the size of web content insize the window.
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>
 @
-@ window..inner_size(), .inner_size()
+@ window-only
 
 
 
-##### Size - Outer Size
+### Window - Get Instance
+@
+@ retrieve
 
-<cb>= <v>window_1<>.outer_size()<>
+
+#### Window - Get Window - Using App
+
+<cb>= <v>app<>.get_window("<v>window_label<>")<>
+
+Returns: <c>Option\<Window><>
+@
+@ find
+@ app.get_window(), .get_window()
+
+
+
+#### Window - Get Current Window - Inside Command
+
+<cb>fn <v>command_1<>(Window <v>window<>, <v>...<>)<>
+
+Usage:
+
+<cb>use tauri::command;
+use tauri::Window;
+
+\#[command]
+fn <v>command_1<>(window: tauri::Window, <v>...<>) {
+	<v>...<>
+}<>
+
+
+Get the current window by placing a window parameter in the command signature.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>
+@
+@ find
+
+
+
+### Window - Properties
+@
+@ get, retrieve
+
+
+
+#### Window - Current Monitor
+
+<cb>= <v>window_1<>.current_monitor()<>
+
+Returns: <c>Result\<Option\<Monitor>><>
+
+
+Returns the monitor the window is displayed on.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.current_monitor>current_monitor<>
+@
+@ window.current_monitor(), .current_monitor()
+
+
+
+#### Window - Label
+
+<cb>= <v>window_1<>.label()<>
 
 
 Returns the outer size of the window.
 
 This is the absolute dimensions including borders and headings.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.label>label<>
 @
-@ window..outer_size(), .outer_size()
+@ name
+@ window.label(), .label()
 
 
 
-#### Window - Operations
+#### Window - Position - Inner Position
+
+<cb>= <v>window_1<>.inner_position()<>
+
+Returns: <c>Result\<PhysicalPosition\<i32>><>
 
 
-##### Size - Set
+Returns the inner position of the window.
+
+This is the position of web content inposition the window.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.inner_position>inner_position<>
+@
+@ window.inner_position(), .inner_position()
+
+
+
+#### Window - Position - Outer Position
+
+<cb>= <v>window_1<>.outer_position()<>
+
+Returns: <c>Result\<PhysicalPosition\<i32>><>
+
+
+Returns the outer position of the window.
+
+This is the absolute dimensions including borders and headings.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.outer_position>outer_position<>
+@
+@ window.outer_position(), .outer_position()
+
+
+
+#### Window - Size - Inner Size
+
+<cb>= <v>window_1<>.inner_size()<>
+
+Returns: <c>Result\<PhysicalSize\<i32>><>
+
+
+Returns the inner size of the window.
+
+This is the size of web content insize the window.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.inner_size>inner_size<>
+@
+@ window.inner_size(), .inner_size()
+
+
+
+#### Window - Size - Outer Size
+
+<cb>= <v>window_1<>.outer_size()<>
+
+Returns: <c>Result\<PhysicalSize\<i32>><>
+
+
+Returns the outer size of the window.
+
+This is the absolute dimensions including borders and headings.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.outer_size>outer_size<>
+@
+@ window.outer_size(), .outer_size()
+
+
+
+#### Window - Title
+
+Not Currently Possible.
+
+There is no current way to get the title.
+This feature may be in the works (2022.11).
+
+
+
+### Window - Operations
+
+
+#### Window - Set Position
+
+<cb><v>window_1<>.set_position(<v>position<>);<>
+
+Usage:
+
+<cb>use tauri::{LogicalPosition, Position};
+
+<v>window_1<>.set_position(Position::Logical(LogicalPosition::new(width: <v>value<>, height: <v>value<>)));<>
+
+<cb>use tauri::{PhysicalPosition, Position};
+
+<v>window_1<>.set_position(Position::Physical(PhysicalPosition::new(width: <v>value<>, height: <v>value<>)));<>
+
+
+Sets the position of the top left corner of the window.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.set_position>set_position<>
+@
+@ move, reposition, change position
+@ window.set_position(), .set_position()
+
+
+
+#### Window - Set Size
 
 <cb><v>window_1<>.set_size(<v>size<>);<>
 
@@ -422,10 +1187,59 @@ Usage:
 Sets the window size.
 
 
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.set_size>set_size<>
+@
+@ resize, change size
+@ window.set_size(), .set_size()
 
-##### Title - Set
+
+
+#### Window - Set Title
 
 <cb><v>window_1<>.set_title("<v>Window Title<>");<>
+
+
+Sets the window title.
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l "https://docs.rs/tauri/latest/tauri/window/index.html">window<>::<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html">Window<>.<l "https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.set_title">set_title<>
+@
+@ window.set_title(), .set_title()
+
+
+
+#### Window - Visibility - Hide
+
+<cb><v>window_1<>.hide();<>
+
+
+Hides the window.
+@
+@ visible
+@ window.hide()
+
+
+
+#### Window - Visibility - Show
+
+<cb><v>window_1<>.show();<>
+
+
+Shows the window.
+@
+@ visible
+@ window.show()
+
+
+
+## WindowEvent
+
+<cb>tauri::WindowEvent<>
+
+
+Tauri Docs: <l "https://docs.rs/tauri/latest/tauri/index.html">tauri<>::<l https://docs.rs/tauri/latest/tauri/enum.WindowEvent.html>WindowEvent<>
+@
+@ tauri::WindowEvent, window event
 
 
 
@@ -436,9 +1250,9 @@ Sets the window size.
 
 ### JavaScript - Import Tauri
 
-<cb>const { invoke } = window.__TAURI__.tauri;<>
+<cb><cb>import { invoke } from "@tauri-apps/api/tauri";<>
 @
-@ window.__TAURI__.tauri, .__TAURI__.tauri, .tauri
+@ import invoke @tauri-apps/api/tauri
 
 
 
@@ -455,12 +1269,51 @@ await invoke("<v>command<>", { <v>data<> })<>
 
 Usage:
 
-<cb>const { invoke } = window.__TAURI__.tauri;
+<cb>import { invoke } from "@tauri-apps/api/tauri";
 
 await invoke("<v>command<>")
 await invoke("<v>command<>", { <v>data<> })<>
 @
 @ await invoke
+@ \@tauri-apps/api/tauri
+
+
+
+### JavaScript - Call Rust Command With Parameter
+
+<cb>await invoke("<v>command<>", {
+	<v>param1<>: <v>value<>,
+	<v>param2<>: <v>value<>
+})<>
+
+Usage:
+
+<cb>import { invoke } from "@tauri-apps/api/tauri";
+
+await invoke("<v>command<>", {
+	<v>param1<>: <v>value<>,
+	<v>param2<>: <v>value<>
+})<>
+@
+@ await invoke, parameters, arguments, values
+@ \@tauri-apps/api/tauri
+
+
+
+### JavaScript - Call Rust Command With Parameter - Naming Convention
+
+<cb>await invoke("<v>command<>", {
+	<v>camelCaseProp1<>: <v>value<>,
+	<v>camelCaseProp2<>: <v>value<>
+})<>
+
+
+Use camelCase for property names when sending calling the backend.
+
+(Rust must use snake_case)
+@
+@ await invoke, parameters, arguments, values
+@ \@tauri-apps/api/tauri
 
 
 
@@ -472,12 +1325,13 @@ await invoke("<v>command<>", { <v>data<> })<>
 
 Usage:
 
-<cb>const { invoke } = window.__TAURI__.tauri;
+<cb>import { invoke } from "@tauri-apps/api/tauri";
 
 = await invoke("<v>command<>")
 = await invoke("<v>command<>", { <v>data<> })<>
 @
 @ await invoke
+@ \@tauri-apps/api/tauri
 
 
 
@@ -589,7 +1443,9 @@ Creates a listener for backend Tauri events.
 
 
 
-# Settings
+# Settings - tauri.config.json
+@
+@ tauri.config.json, tauri config json,
 
 
 ### Setting - App - Icon
@@ -597,16 +1453,16 @@ Creates a listener for backend Tauri events.
 tauri.conf.json:
 
 <cb>{
-{
-	"tauri": {
-		"icon": [
-		"icons/32x32.png",
-		"icons/128x128.png",
-		"icons/128x128@2x.png",
-		"icons/icon.icns",
-		"icons/icon.ico"
-		],
-	}
+	{
+		"tauri": {
+			"icon": [
+			"icons/32x32.png",
+			"icons/128x128.png",
+			"icons/128x128@2x.png",
+			"icons/icon.icns",
+			"icons/icon.ico"
+			],
+		}
 	}
 }<>
 
@@ -639,6 +1495,27 @@ tauri.conf.json:
 		]
 	}
 }<>
+@
+@ windows
+
+
+
+### Setting - Window - Default Position
+
+tauri.conf.json:
+
+<cb>{
+	"tauri": {
+		"windows": [
+			{
+				"x": <v>logical_pixels<>,
+				"y": <v>logical_pixels<>
+			}
+		]
+	}
+}<>
+@
+@ x, y, top, left, corner, windows
 
 
 
@@ -658,21 +1535,45 @@ tauri.conf.json:
 	}
 }<>
 
+(<m>Confirm "x", "y" = logical pixels!<>)
+@
+@ x, y, width, height, windows
+
+
+
+### Setting - Window - Default Title
+
+tauri.conf.json:
+
 <cb>{
 	"tauri": {
 		"windows": [
 			{
-				"fullscreen": <v>true | false<>,
-				"height": <v>pixels<>,
-				"width": <v>pixels<>,
-				"x": <v>logical_pixels<>,
-				"y": <v>logical_pixels<>
+				"title": "<v>Window Title<>",
 			}
 		]
 	}
 }<>
+@
+@ windows
 
-(<m>Confirm "x", "y" = logical pixels!<>)
+
+
+### Setting - Window - Default Visibility
+
+tauri.conf.json:
+
+<cb>{
+	"tauri": {
+		"windows": [
+			{
+				"visible": <v>true | false<>,
+			}
+		]
+	}
+}<>
+@
+@ show, hide, invisible, display
 
 
 
@@ -689,6 +1590,8 @@ tauri.conf.json:
 	]
 	}
 }<>
+@
+@ windows
 
 
 
@@ -724,6 +1627,391 @@ tauri.conf.json:
 
 
 
+# App Distribution - Apple - General Distribution
+@
+@ application, dist-only, distribution, macos
+
+
+### Signing Requirements
+
+<*>An Apple Account
+Apple Account Issuer ID
+Apple Account Key
+Certificate of type 'Developer ID Application'
+Certification in Base64 Form<>
+
+
+
+### Signing Variables
+
+These are required to use Tauri to sign and notarize the application during the build process.
+
+<cb>APPLE_API_ISSUER
+APPLE_API_KEY
+APPLE_CERTIFICATE
+APPLE_CERTIFICATE_PASSWORD
+APPLE_PROVIDER_SHORT_NAME
+APPLE_SIGNING_IDENTITY
+CI<>
+
+
+Sample:
+
+<cb>APPLE_API_ISSUER="<v>31ca3f90-a8a6-11ed-b0f1-5b59e18d7cc6<>"
+APPLE_API_KEY="<v>12A3NP4HUE<>"
+APPLE_CERTIFICATE="<v>U2FtcGxlIGNlcnQgb25seS4gWW... cert in base64 ...eKAmSwgZW5kIHdpdGgg4oCYQWdFQicu<>"
+APPLE_CERTIFICATE_PASSWORD="<v>the password you gave while saving the certficate<>"
+APPLE_PROVIDER_SHORT_NAME="<v>34B5MR6HEY<>"
+APPLE_SIGNING_IDENTITY="<v>Developer ID Application: User Name (34B5MR6HEY)<>"
+CI=true<>
+
+
+
+# App Distribution - Apple - App Store Distribution
+@
+@ application, dist-only, distribution, macos
+
+
+### Signing Requirements
+
+<*>An Apple Account
+Apple Account Issuer ID
+Apple Account Key
+Certificate of type 'Apple Distribution'
+Certificate of type '3rd Party Mac Developer Installer'
+Provisioning Profile (embedded.provisionprofile)
+Entitlements (entitlements.plist)<>
+
+
+
+### Signing Variables - But Don't Use
+
+These variables will sign the application for the app store but...
+<!>the signing process is broken for app store builds as of February 2023<>.
+
+The current build process does not include entitlements in the app signature and will be rejected by Apple.
+So sign and package manually.
+
+When this is fixed, set these:
+
+<cb>APPLE_CERTIFICATE
+APPLE_CERTIFICATE_PASSWORD
+APPLE_PROVIDER_SHORT_NAME
+APPLE_SIGNING_IDENTITY
+CI<>
+
+
+Sample:
+
+<cb>APPLE_CERTIFICATE="<v>U2FtcGxlIGNlcnQgb25seS4gWW... cert in base64 ...eKAmSwgZW5kIHdpdGgg4oCYQWdFQicu<>"
+APPLE_CERTIFICATE_PASSWORD="<v>the password you gave while saving the certficate<>"
+APPLE_PROVIDER_SHORT_NAME="<v>34B5MR6HEY<>"
+APPLE_SIGNING_IDENTITY="<v>Apple Distribution: User Name (34B5MR6HEY)<>"
+CI=true<>
+
+
+
+# Apple Signing And Notarizing Variables
+@
+@ distribution, macos
+
+
+## Apple Signing, Notarizing Variables - Basics
+
+APPLE_SIGNING_IDENTITY
+APPLE_PROVIDER_SHORT_NAME
+
+APPLE_CERTIFICATE
+APPLE_CERTIFICATE_PASSWORD
+
+APPLE_ID
+APPLE_PASSWORD
+
+APPLE_API_ISSUER
+APPLE_API_KEY
+
+
+
+## Apple Signing, Notarizing Variables - Details
+
+
+### APPLE_API_ISSUER
+
+<cb>APPLE_API_ISSUER=<v>issuer_id<><>
+
+Example:
+
+<cb>APPLE_API_ISSUER="<v>31ca3f90-a8a6-11ed-b0f1-5b59e18d7cc6<>"<>
+
+
+The account issuer's ID (Apple's UUID for the account).
+Required if notarizing the app.
+
+
+Get from Apple Here:
+
+<in-2>API Store Connect API - Issuer ID:
+
+<l>https://appstoreconnect.apple.com/access/api<>
+
+<card>Users and Access (top nav) ->
+Keys (tab) ->
+App Store Connect API (left nav)
+
+Take from "Issuer ID (above "Active")<><>
+@
+@ apple api issuer, store connection api key
+
+
+
+### APPLE_API_KEY
+
+<cb>APPLE_API_KEY=<v>key_id_from_apple<><>
+
+Example:
+
+<cb>APPLE_API_KEY="<v>12A3NP4HUE<>"<>
+
+The id of the key created on the App Store Connect keys.
+
+Required if notarizing the app Only.
+
+
+Get from Apple Here:
+
+<in-2>Key ID
+
+<l>https://appstoreconnect.apple.com/access/api<>
+
+<card>Users and Access (top nav) ->
+Keys (tab) ->
+App Store Connect API (left nav)
+
+Take from the key (key id column).<><>
+@
+@ apple api key
+
+
+
+### APPLE_CERTIFICATE
+
+<cb>APPLE_CERTIFICATE=<v>certificate_in_base64<><>
+
+The actual certificate in base64.
+
+
+Sample (70-ish lines like this):
+
+<cb>U2FtcGxlIGNlcnQgb25seS4gWW91cidzIHNob3VsZCBiZS
+A0MDAwKyBjaGFyYWN0ZXJzLCBhbmQgbWF5IHN0YXJ0IHdp
+dGgg4oCYTUlJTeKAmSwgZW5kIHdpdGgg4oCYQWdFQicu<>
+@
+@ apple certificate
+
+
+
+### APPLE_CERTIFICATE_PASSWORD
+
+<cb>APPLE_CERTIFICATE_PASSWORD=<v>certificate_password<><>
+
+Example:
+
+<cb>APPLE_CERTIFICATE_PASSWORD="<v>your_cert_password_goes_here<>"<>
+
+
+The password created by you when saving the certificate from KeyChain.
+Save the cert as a .p12 file, KeyChain will ask for a new password.
+@
+@ apple certificate password
+
+
+
+### APPLE_ID
+
+<cb>APPLE_ID=<v>user-apple-id@email.com<><>
+
+
+The Apple user Id for the account.
+
+Required for notarizing only.
+
+
+ℹ️ Prefer APPLE_API_ISSUER, APPLE_API_KEY over APPLE_ID, APPLE_PASSWORD.
+@
+@ apple id, user id, icloud account
+
+
+
+### APPLE_PASSWORD
+
+<cb>APPLE_PASSWORD=<v>user_apple_password<><>
+
+
+The Apple password for the account.
+
+Password is <b>app<> specific.
+Required for notarizing only.
+
+
+ℹ️ Prefer APPLE_API_ISSUER, APPLE_API_KEY over APPLE_ID, APPLE_PASSWORD.
+@
+@ apple password
+
+
+
+### APPLE_PROVIDER_SHORT_NAME
+
+<cb>APPLE_PROVIDER_SHORT_NAME=<v>team_id<><>
+
+Example:
+
+<cb>APPLE_PROVIDER_SHORT_NAME="<v>34B5MR6HEY<>"<>
+
+
+The team ID assigned by Apple
+
+
+Get from Apple Here:
+
+<in-2>Membership Details (scroll down to see Team ID):
+
+<l>https://developer.apple.com/account<><>
+@
+@ apple provider short name, team id
+
+
+
+### APPLE_SIGNING_IDENTITY
+
+<cb>APPLE_SIGNING_IDENTITY=<v>certificate_name_in_keychain<><>
+
+Example:
+
+<cb>APPLE_SIGNING_IDENTITY="Developer ID Application: <v>User Name<> (<v>34B5MR6HEY<>)"<>
+
+
+The name of the certificate entry in Keychain Access (app).
+Create these using XCode (the easiest option).
+
+
+See Available from Apple Here:
+
+<in-2>Certificates, Identifiers & Profiles:
+
+<l>https://developer.apple.com/account/resources/certificates/list<><>
+
+
+General Distribution (sign and notarize):
+
+<cb>APPLE_SIGNING_IDENTITY="Developer ID Application: <v>User Name<> (<v>34B5MR6HEY<>)"<>
+
+Store Distribution, App Signing:
+
+<cb>APPLE_SIGNING_IDENTITY="Apple Distribution: <v>User Name<> (<v>34B5MR6HEY<>)"<>
+
+Store Distribution, Package Signing:
+
+<cb>APPLE_SIGNING_IDENTITY="3rd Party Mac Developer Installer: <v>User Name<> (<v>34B5MR6HEY<>)"<>
+@
+@ apple signing identity, keychain access name, certificate, certs, certificates
+@ Developer ID Application, 3rd Party Mac Developer Installer, package, packaging
+
+
+
+### APPLE_ID, APPLE_PASSWORD vs APPLE_API_ISSUER, APPLE_API_KEY	
+
+Either may be used to notarize an application.
+Prefer APPLE_API_ISSUER, APPLE_API_KEY.
+
+
+APPLE_ID, APPLE_PASSWORD:
+
+<*>Use the user's actual id and password.<>
+
+
+
+APPLE_API_ISSUER, APPLE_API_KEY:
+
+<*>Preferred
+Uses an App specific Issuer ID (UUID)
+Uses an App specific password<>
+
+
+
+# How To
+
+
+### Project - Update Version Number
+
+Update these project files:
+
+<card>package.json
+src-tauri/Cargo.toml
+src-tauri/tauri.conf.json<>
+
+
+package.json:
+
+<cb>"version": "1.0.1",<>
+
+src-tauri/Cargo.toml:
+
+<cb>version = "1.0.1"<>
+
+src-tauri/tauri.conf.json:
+
+<cb>"version": "1.0.1"<>
+
+
+package.json:
+
+<*>NPM Version Number<>
+
+src-tauri/Cargo.toml:
+
+<*>Cargo Build Version Number<>
+
+src-tauri/tauri.conf.json:
+
+<*>About Version Number
+Install Version Number
+info.plist Version Number (MacOS)<>
+@
+@ increment, change
+
+
+### Run - With Debug Logs
+
+Set Environment Variable:
+
+<cb>RUST_BACKTRACE=1<>
+@
+@ envirorment variable, rust_backtrace=1
+
+
+
+# Acronyms
+
+
+### TAO
+
+
+### WRY
+No idea what this stands for.
+
+
+
 # Terms
+
+
+### TAO
+
+The cross-platform library that allows Rust to create UI windows.
+
+
+
+### WRY
+
+The cross-platform webview rendering library used by Rust.
 
 
